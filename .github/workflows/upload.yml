@@ -65,5 +65,5 @@ jobs:
           function-name: ${{ inputs.function-name }}
           handler: ${{ inputs.handler }}
           lambda-role-arn: ${{ secrets.lambda_role_arn }}
-          role-to-assume: ${{ secrets.role_to_assume }}
+          role_to_assume: ${{ secrets.role_to_assume }}
           aws_region: "eu-west-2"

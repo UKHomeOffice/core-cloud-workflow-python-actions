@@ -7,7 +7,7 @@ inputs:
     required: false
     default: "."
 
-  role-to-assume:
+  role_to_assume:
     description: "The ARN of the role to assume for AWS credentials"
     required: true
 
