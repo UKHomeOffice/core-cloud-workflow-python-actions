@@ -31,14 +31,14 @@ jobs:
       - name: Run Python lint
         uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/lint@ccl-6430-python
         with:
-          working-directory: ${{ inputs.working_directory }}
+          working_directory: ${{ inputs.working_directory }}
 
       - name: Run Python format
         uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/format@ccl-6430-python
         with:
-          working-directory: ${{ inputs.working_directory }}
+          working_directory: ${{ inputs.working_directory }}
 
       - name: Run Python tests
         uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/test@ccl-6430-python
         with:
-          working-directory: ${{ inputs.working_directory }}
+          working_directory: ${{ inputs.working_directory }}
