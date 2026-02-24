@@ -1,0 +1,37 @@
+name: Lint, format, and testing python lambda function
+
+on:
+  workflow_call:
+    inputs:
+      working_directory:
+        description: "Directory to run python workflow in (default: repository root)"
+        required: false
+        type: string
+        default: "."
+
+jobs:
+  lint-format-test:
+    name: "Run lint, format, and tests for Python lambda function"
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Set up Python 
+        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/setup@ccl-6430-python
+
+      - name: Run Python lint
+        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/lint@@ccl-6430-python
+        with:
+          working-directory: ${{ inputs.working_directory }}
+
+      - name: Run Python format
+        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/format@@ccl-6430-python
+        with:
+          working-directory: ${{ inputs.working_directory }}
+
+      - name: Run Python tests
+        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/test@@ccl-6430-python
+        with:
+          working-directory: ${{ inputs.working_directory }}

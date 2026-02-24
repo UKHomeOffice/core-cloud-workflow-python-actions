@@ -1,0 +1,69 @@
+name: Validate and upload Python lambda function
+
+on:
+  workflow_call:
+    inputs:
+      working_directory:
+        description: "Directory to run npm audit in (default: repository root)"
+        required: false
+        type: string
+        default: "."
+      python-version:
+        description: "The version of Python to use for the lambda function (default: python3.14)"
+        required: false
+        type: string
+        default: "python3.14"
+      function-name:
+        description: "The name of the lambda function to update"
+        required: true
+        type: string
+      handler:
+        description: "The handler for the lambda function (e.g. file.function)"
+        required: true
+        type: string
+    secrets:
+      role_to_assume:
+        description: "The ARN of the role to assume for AWS credentials"
+        required: true
+      lambda_role_arn:
+        description: "The ARN of the IAM role to use for the lambda function"
+        required: true
+
+
+jobs:
+  validate-upload:
+    name: "Validate and upload Python lambda function"
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Set up Python 
+        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/setup@ccl-6430-python
+
+      - name: Run Python lint
+        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/lint@@ccl-6430-python
+        with:
+          working-directory: ${{ inputs.working_directory }}
+
+      - name: Run Python format
+        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/format@@ccl-6430-python
+        with:
+          working-directory: ${{ inputs.working_directory }}
+
+      - name: Run Python tests
+        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/test@@ccl-6430-python
+        with:
+          working-directory: ${{ inputs.working_directory }}
+    
+      - name: Upload Lambda Function
+        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/lambda-upload@@ccl-6430-python
+        with:
+          working-directory: ${{ inputs.working_directory }}
+          python-version: ${{ inputs.python-version }}
+          function-name: ${{ inputs.function-name }}
+          handler: ${{ inputs.handler }}
+          lambda-role-arn: ${{ secrets.lambda_role_arn }}
+          role-to-assume: ${{ secrets.role_to_assume }}
+          aws_region: "eu-west-2"
