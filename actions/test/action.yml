@@ -1,0 +1,28 @@
+name: 'Test python'
+description: 'Runs tests for the Python project'
+
+inputs:
+  working-directory:
+    description: 'The working directory where the tests should be run'
+    required: false
+    default: '.'
+
+outputs:
+  python_test_exit_code:
+    description: "The exit code from the python test command"
+    value: ${{ steps.python_test.outputs.exit_code }}
+  
+runs:
+  using: "composite"
+  steps:
+    - name: Run Python tests 
+      id: python_test
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |
+        set +e
+        python -m unittest discover -s tests
+        EXIT_CODE=$?
+        set -e
+
+        echo "exit_code=$EXIT_CODE" >> $GITHUB_OUTPUT

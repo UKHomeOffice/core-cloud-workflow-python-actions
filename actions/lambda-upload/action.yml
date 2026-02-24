@@ -1,0 +1,55 @@
+name: "Upload python lambda"
+description: "Uploads a deployment package to AWS Lambda"
+
+inputs:
+  working-directory:
+    description: "The working directory where the lambda is"
+    required: false
+    default: "."
+
+  role-to-assume:
+    description: "The ARN of the role to assume for AWS credentials"
+    required: true
+
+  aws_region:
+    description: "AWS region for ECR"
+    required: false
+    type: string
+    default: "eu-west-2"
+
+  python-version:
+    description: "The version of Python to use for the lambda function"
+    required: false
+    default: "python3.14"
+
+  function-name:
+    description: "The name of the lambda function to update"
+    required: true
+
+  handler:
+    description: "The handler for the lambda function (e.g. file.function)"
+    required: true
+
+  lambda-role-arn:
+    description: "The ARN of the IAM role to use for the lambda function"
+    required: true
+
+# outputs:
+
+runs:
+  using: "composite"
+  steps:
+    - name: Assume Role in Account
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ inputs.role_to_assume }}
+        aws-region: ${{ inputs.aws_region }}
+
+    - name: Deploy Lambda Function
+      uses: aws-actions/aws-lambda-deploy@v1.1.0
+      with:
+        function-name: ${{ inputs.function-name }}
+        code-artifacts-dir: ${{ inputs.working-directory }}
+        handler: ${{ inputs.handler }}
+        runtime: ${{ inputs.python-version }}
+        role: ${{ inputs.lambda-role-arn }}
