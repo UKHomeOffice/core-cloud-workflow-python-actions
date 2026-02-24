@@ -27,7 +27,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: |
         set +e
-        ruff check --diff --output-format=github .
+        ruff format --diff --output-format=github --preview .
         EXIT_CODE=$?
         set -e
 
