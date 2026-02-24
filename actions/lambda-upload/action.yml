@@ -2,7 +2,7 @@ name: "Upload python lambda"
 description: "Uploads a deployment package to AWS Lambda"
 
 inputs:
-  working-directory:
+  working_directory:
     description: "The working directory where the lambda is"
     required: false
     default: "."
@@ -17,7 +17,7 @@ inputs:
     type: string
     default: "eu-west-2"
 
-  python-version:
+  python_version:
     description: "The version of Python to use for the lambda function"
     required: false
     default: "python3.14"
@@ -49,7 +49,7 @@ runs:
       uses: aws-actions/aws-lambda-deploy@v1.1.0
       with:
         function-name: ${{ inputs.function-name }}
-        code-artifacts-dir: ${{ inputs.working-directory }}
+        code-artifacts-dir: ${{ inputs.working_directory }}
         handler: ${{ inputs.handler }}
-        runtime: ${{ inputs.python-version }}
+        runtime: ${{ inputs.python_version }}
         role: ${{ inputs.lambda-role-arn }}
