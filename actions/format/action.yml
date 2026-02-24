@@ -2,7 +2,7 @@ name: 'Format python'
 description: 'Runs formatting for the Python project'
 
 inputs:
-  working-directory:
+  working_directory:
     description: 'The working directory where the formatting should be run'
     required: false
     default: '.'
@@ -27,7 +27,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: |
         set +e
-        ruff format --diff --output-format=github .
+        ruff check --diff --output-format=github .
         EXIT_CODE=$?
         set -e
 

@@ -2,7 +2,7 @@ name: 'Test python'
 description: 'Runs tests for the Python project'
 
 inputs:
-  working-directory:
+  working_directory:
     description: 'The working directory where the tests should be run'
     required: false
     default: '.'

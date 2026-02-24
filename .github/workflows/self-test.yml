@@ -1,0 +1,91 @@
+name: Self Test - python lint, format, test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # test-validation-workflow:
+  #   permissions:
+  #     contents: read
+  #   uses: ./.github/workflows/validation.yml
+  #   with:
+  #     working_directory: "tests/valid-app"
+
+  test-invalid-lint:
+    permissions:
+      contents: read
+    name: Test - Invalid python lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python 
+        uses: ./actions/setup
+
+      - name: Run python lint (invalid config)
+        id: lint
+        uses: ./actions/lint
+        continue-on-error: true
+        with:
+          working_directory: "tests/invalid-lint"
+
+      - name: Assert failure
+        run: |
+          if [ "${{ steps.lint.outputs.python_lint_exit_code }}" -eq 0 ]; then
+            echo "Expected python lint to fail but it succeeded."
+            exit 1
+          fi
+  
+  test-invalid-format:
+    permissions:
+      contents: read
+    name: Test - Invalid python format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python 
+        uses: ./actions/setup
+
+      - name: Run python format (invalid config)
+        id: format
+        uses: ./actions/format
+        continue-on-error: true
+        with:
+          working_directory: "tests/invalid-format"
+
+      - name: Assert failure
+        run: |
+          if [ "${{ steps.format.outputs.python_format_exit_code }}" -eq 0 ]; then
+            echo "Expected python format to fail but it succeeded."
+            exit 1
+          fi
+  
+  test-invalid-test:
+    permissions:
+      contents: read
+    name: Test - Invalid python test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python 
+        uses: ./actions/setup
+
+      - name: Run python test (invalid config)
+        id: test
+        uses: ./actions/test
+        continue-on-error: true
+        with:
+          working_directory: "tests/invalid-test"
+
+      - name: Assert failure
+        run: |
+          if [ "${{ steps.test.outputs.python_test_exit_code }}" -eq 0 ]; then
+            echo "Expected python test to fail but it succeeded."
+            exit 1
+          fi

@@ -8,6 +8,11 @@ on:
         required: false
         type: string
         default: "."
+      python_version:
+        description: "Version of Python to use (default: 3.14)"
+        required: false
+        type: string
+        default: "3.14"
 
 jobs:
   lint-format-test:
@@ -20,18 +25,20 @@ jobs:
 
       - name: Set up Python 
         uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/setup@ccl-6430-python
+        with:
+          python_version: ${{ inputs.python_version }}
 
       - name: Run Python lint
-        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/lint@@ccl-6430-python
+        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/lint@ccl-6430-python
         with:
           working-directory: ${{ inputs.working_directory }}
 
       - name: Run Python format
-        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/format@@ccl-6430-python
+        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/format@ccl-6430-python
         with:
           working-directory: ${{ inputs.working_directory }}
 
       - name: Run Python tests
-        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/test@@ccl-6430-python
+        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/test@ccl-6430-python
         with:
           working-directory: ${{ inputs.working_directory }}

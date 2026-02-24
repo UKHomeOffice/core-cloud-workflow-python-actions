@@ -2,7 +2,7 @@ name: 'Lint python'
 description: 'Runs linting for the Python project'
 
 inputs:
-  working-directory:
+  working_directory:
     description: 'The working directory where the linting should be run'
     required: false
     default: '.'
