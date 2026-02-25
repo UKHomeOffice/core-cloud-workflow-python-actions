@@ -12,11 +12,16 @@ on:
         description: "The version of Python to use for the lambda function (default: python3.14)"
         required: false
         type: string
-        default: "python3.14"
-      function-name:
+        default: "3.14"
+      function_name:
         description: "The name of the lambda function to update"
         required: true
         type: string
+      python_runtime:
+        description: "The runtime to use for the lambda function (default: python3.14)"
+        required: false        
+        type: string
+        default: "python3.14"
       handler:
         description: "The handler for the lambda function (e.g. file.function)"
         required: true
@@ -62,8 +67,9 @@ jobs:
         with:
           working_directory: ${{ inputs.working_directory }}
           python_version: ${{ inputs.python_version }}
-          function-name: ${{ inputs.function-name }}
+          function_name: ${{ inputs.function_name }}
+          python_runtime: ${{ inputs.python_runtime }}
           handler: ${{ inputs.handler }}
-          lambda-role-arn: ${{ secrets.LAMBDA_ROLE_ARN }}
+          lambda_role_arn: ${{ secrets.LAMBDA_ROLE_ARN }}
           role_to_assume: ${{ secrets.ROLE_TO_ASSUME }}
           aws_region: "eu-west-2"

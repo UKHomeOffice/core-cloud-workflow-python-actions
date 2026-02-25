@@ -20,17 +20,22 @@ inputs:
   python_version:
     description: "The version of Python to use for the lambda function"
     required: false
-    default: "python3.14"
+    default: "3.14"
 
-  function-name:
+  function_name:
     description: "The name of the lambda function to update"
     required: true
+
+  python_runtime:
+    description: "The runtime to use for the lambda function (default: python3.14)"
+    required: false
+    default: "python3.14"
 
   handler:
     description: "The handler for the lambda function (e.g. file.function)"
     required: true
 
-  lambda-role-arn:
+  lambda_role_arn:
     description: "The ARN of the IAM role to use for the lambda function"
     required: true
 
@@ -48,8 +53,8 @@ runs:
     - name: Deploy Lambda Function
       uses: aws-actions/aws-lambda-deploy@v1.1.0
       with:
-        function-name: ${{ inputs.function-name }}
+        function-name: ${{ inputs.function_name }}
         code-artifacts-dir: ${{ inputs.working_directory }}
         handler: ${{ inputs.handler }}
-        runtime: ${{ inputs.python_version }}
-        role: ${{ inputs.lambda-role-arn }}
+        runtime: ${{ inputs.python_runtime }}
+        role: ${{ inputs.lambda_role_arn }}
