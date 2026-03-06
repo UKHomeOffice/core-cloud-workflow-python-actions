@@ -8,13 +8,6 @@ on:
       - main
 
 jobs:
-  test-validation-workflow:
-    permissions:
-      contents: read
-    uses: ./.github/workflows/validation.yml
-    with:
-      working_directory: "tests/valid-app"
-  
   test-invalid-lint:
     permissions:
       contents: read

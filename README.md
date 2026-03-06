@@ -26,14 +26,14 @@ Workflows can be used as
 
 jobs:
   validate:
-    uses: UKHomeOffice/core-cloud-workflow-python-actions/.github/workflows/validation.yml@main
+    uses: UKHomeOffice/core-cloud-workflow-python-actions/.github/workflows/validation.yml@1.0.0
     with:
       working_directory: "hello-world"
       python_version: "3.14"
 
   upload:
     needs: validate
-    uses: UKHomeOffice/core-cloud-workflow-python-actions/.github/workflows/upload.yml@main
+    uses: UKHomeOffice/core-cloud-workflow-python-actions/.github/workflows/upload.yml@1.0.0
     with:
       working_directory: "hello-world"
       python_version: "3.14"
