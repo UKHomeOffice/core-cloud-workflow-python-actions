@@ -1,0 +1,75 @@
+name: Validate and upload Python lambda function
+
+on:
+  workflow_call:
+    inputs:
+      working_directory:
+        description: "Directory to run npm audit in (default: repository root)"
+        required: false
+        type: string
+        default: "."
+      python_version:
+        description: "The version of Python to use for the lambda function (default: python3.14)"
+        required: false
+        type: string
+        default: "3.14"
+      function_name:
+        description: "The name of the lambda function to update"
+        required: true
+        type: string
+      python_runtime:
+        description: "The runtime to use for the lambda function (default: python3.14)"
+        required: false        
+        type: string
+        default: "python3.14"
+      handler:
+        description: "The handler for the lambda function (e.g. file.function)"
+        required: true
+        type: string
+    secrets:
+      ROLE_TO_ASSUME:
+        description: "The ARN of the role to assume for AWS credentials"
+        required: true
+      LAMBDA_ROLE_ARN:
+        description: "The ARN of the IAM role to use for the lambda function"
+        required: true
+
+
+jobs:
+  validate-upload:
+    name: "Validate and upload Python lambda function"
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Set up Python 
+        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/setup@1.0.0
+
+      - name: Run Python lint
+        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/lint@1.0.0
+        with:
+          working_directory: ${{ inputs.working_directory }}
+
+      - name: Run Python format
+        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/format@1.0.0
+        with:
+          working_directory: ${{ inputs.working_directory }}
+
+      - name: Run Python tests
+        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/test@1.0.0
+        with:
+          working_directory: ${{ inputs.working_directory }}
+    
+      - name: Upload Lambda Function
+        uses: UKHomeOffice/core-cloud-workflow-python-actions/actions/lambda-upload@1.0.0
+        with:
+          working_directory: ${{ inputs.working_directory }}
+          python_version: ${{ inputs.python_version }}
+          function_name: ${{ inputs.function_name }}
+          python_runtime: ${{ inputs.python_runtime }}
+          handler: ${{ inputs.handler }}
+          lambda_role_arn: ${{ secrets.LAMBDA_ROLE_ARN }}
+          role_to_assume: ${{ secrets.ROLE_TO_ASSUME }}
+          aws_region: "eu-west-2"
